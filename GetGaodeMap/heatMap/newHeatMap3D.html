@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>创建地图场景</title>
+    <style> ::-webkit-scrollbar{display:none;}html,body{overflow:hidden;margin:0;}
+    	#map { position:absolute; top:0; bottom:0; width:100%; }
+    </style>
+</head>
+<body>
+  
+<div id="map"></div>
+  <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.5.0/mapbox-gl.css' rel='stylesheet' />
+  
+  <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.5.0/mapbox-gl.js'></script>
+<!-- <script src="https://gw.alipayobjects.com/os/antv/pkg/_antv.l7-2.0.0-beta.25/dist/l7.js"></script> -->
+<script src="https://gw.alipayobjects.com/os/antv/pkg/_antv.l7-2.0.0-beta.19/dist/l7.js"></script>
+<script>
+
+const scene = new L7.Scene({
+  id: 'map',
+  map: new L7.Mapbox({
+    center: [ 114.33383079335335, 30.551873105004427 ],
+    pitch: 4.00000000000001,
+    zoom: 10.210275860702593,
+    rotation: 19.313180925794313,
+    style: 'light'
+
+  })
+});
+
+fetch(
+  'http://114.55.27.162:8080/testweb2/heatMap/heatMap-10000.json'
+    // 'https://gw.alipayobjects.com/os/basement_prod/337ddbb7-aa3f-4679-ab60-d64359241955.json'
+)
+//   .then(res => res.json())
+//   .then(data => {
+//     const layer = new L7.HeatmapLayer({})
+//       .source(data)
+//       .size('mag', [ 0, 1 ])
+//       .shape('heatmap3D')
+//       // weight映射通道
+//       .style({
+//         intensity: 100,
+//         radius: 5,
+//         opacity: 1.0,
+//         rampColors: {
+//           colors: [
+//             '#2E8AE6',
+//             '#69D1AB',
+//             '#DAF291',
+//             '#FFD591',
+//             '#FF7A45',
+//             '#CF1D49'
+//           ],
+//           positions: [ 0, 0.2, 0.4, 0.6, 0.8, 1.0 ]
+//         }
+//       });
+//     scene.addLayer(layer);
+//   });
+
+
+
+
+// const scene = new L7.Scene({
+//   id: 'map',
+//   map: new L7.GaodeMap({
+//     style: 'light',
+//     viewMode: '3D',
+//     pitch: 0,
+//     center: [ 114.33383079335335, 30.551873105004427 ],
+//     zoom: 12.068989519212174
+//   })
+// });
+
+// fetch(
+//   'https://gw.alipayobjects.com/os/basement_prod/337ddbb7-aa3f-4679-ab60-d64359241955.json'
+// )
+
+// .then(res => res.json())
+//   .then(data => {
+//     const layer = new L7.HeatmapLayer({})
+//       .source(data)
+//       .size('capacity', [ 0, 1 ])
+
+//       .shape('heatmap3D')
+//       // weight映射通道
+//       .style({
+//         intensity: 10,
+//         radius: 5,
+//         opacity: 1.0,
+//         rampColors: {
+//           colors: [
+//             '#2E8AE6',
+//             '#69D1AB',
+//             '#DAF291',
+//             '#FFD591',
+//             '#FF7A45',
+//             '#CF1D49'
+//           ],
+//           positions: [ 0, 0.2, 0.4, 0.6, 0.8, 1.0 ]
+//         }
+//       });
+//     scene.addLayer(layer);
+//   });
+
+
+  .then(res => res.json())
+  .then(data => {
+    const layer = new L7.HeatmapLayer({})
+      .source(data)
+      .shape('heatmap3D')
+      .size('mag', [ 0, 1.0 ]) // weight映射通道
+      .style({
+        intensity: 2,
+        radius: 10,
+        opacity: 1.0,
+        rampColors: {
+          colors: [
+            '#FF4818',
+            '#F7B74A',
+            '#FFF598',
+            '#91EABC',
+            '#2EA9A1',
+            '#206C7C'
+          ].reverse(),
+          positions: [ 0, 0.2, 0.4, 0.6, 0.8, 1.0 ]
+        }
+      });
+    scene.addLayer(layer);
+  });
+
+
+
+
+
+
+</script>
+</body>
+</html>

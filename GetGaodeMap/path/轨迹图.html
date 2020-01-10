@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>创建地图场景</title>
+    <style>
+       html,body{overflow:hidden;margin:0;}
+    	#map { position:absolute; top:0; bottom:0; width:100%; }
+    </style>
+</head>
+<body>
+<div id="map"></div>
+<script src="https://gw.alipayobjects.com/os/antv/pkg/_antv.l7-2.0.0-beta.19/dist/l7.js"></script>
+<script>
+
+const scene = new L7.Scene({
+  id: 'map',
+  map: new L7.GaodeMap({
+    pitch: 0,
+    style: 'light',
+    center: [ 114.33383079335335, 30.551873105004427 ],
+    zoom:  12.45977
+  })
+});
+fetch('http://114.55.27.162:8080/testweb2/path/handled_total+1.csv')
+  .then(res => res.text())
+  .then(data => {
+    const layer = new L7.LineLayer({})
+      .source(data, {
+        parser: {
+          type: 'csv',
+          x: 'c',
+          y: 'd',
+          x1: 'f',
+          y1: 'g'
+        }
+      })
+      .size(1)
+      .shape('greatcircle')
+      .color('#8C1EB2')
+      .style({
+        opacity: 0.8,
+        blur: 0.99
+      });
+    scene.addLayer(layer);
+  });
+
+
+</script>
+</body>
+</html>

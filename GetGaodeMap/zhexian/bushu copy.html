@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>单车使用情况折线图</title>
+    <!-- 引入 G2 文件 -->
+    <script src="https://gw.alipayobjects.com/os/lib/antv/g2/3.4.10/dist/g2.min.js"></script>
+  </head>
+  <body>
+    <!-- 创建图表容器 -->
+    <div id="container"></div>
+    <script>
+fetch('http://114.55.27.162:8080/testweb2/distance.json')
+  .then(res => res.json())
+  .then(data => {
+    const chart = new G2.Chart({
+      container: 'container',
+      forceFit: true,
+      height: 500
+    });
+    // 数据格式： [{"gender":"female","height":161.2,"weight":51.6}]
+    chart.source(data);
+    chart.tooltip({
+      showTitle: false,
+      crosshairs: {
+        type: 'cross'
+      },
+      itemTpl: '<li data-index={index} style="margin-bottom:4px;">'
+        + '<span style="background-color:{color};" class="g2-tooltip-marker"></span>'
+        + '{name}<br/>'
+        + '{value}'
+        + '</li>'
+    });
+    chart.point().position('height*weight')
+      .size(4)
+      .shape('circle')
+      .opacity(0.65)
+      .tooltip('gender*height*weight', (gender, height, weight) => {
+        return {
+          name: gender,
+          value: height + '(cm), ' + weight + '(kg)'
+        };
+      });
+    chart.render();
+  });
+    </script>
+  </body>
+</html>

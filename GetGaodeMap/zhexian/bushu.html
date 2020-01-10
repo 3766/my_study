@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>单车使用情况折线图</title>
+    <!-- 引入 G2 文件 -->
+    <!-- <script src="{{ url.g2 }}"></script> -->
+    <script src="https://gw.alipayobjects.com/os/lib/antv/g2/3.4.10/dist/g2.min.js"></script>
+  </head>
+  <body>
+    <!-- 创建图表容器 -->
+    <div id="container"></div>
+    <script>
+
+
+    fetch('http://114.55.27.162:8080/testweb2/zhexian/bushu0-5.json')
+    // fetch('http://114.55.27.162:8080/testweb2/distance_rank.json')
+    // fetch('../data/salesTrend.json')
+    .then(res => res.json())
+    .then(data => {
+      // const TICKS = [ '2018-02-05T00:01:50',"2018-02-05T01:00:02","2018-02-05T02:00:32", "2018-02-05T03:00:08","2018-02-05T04:00:02","2018-02-05T05:00:13","2018-02-05T06:00:03","2018-02-05T07:00:08","2018-02-05T08:00:04","2018-02-05T09:00:01","2018-02-05T10:00:13","2018-02-05T11:00:04","2018-02-05T12:00:00","2018-02-05T13:00:00","2018-02-05T14:00:00","2018-02-05T15:00:01","2018-02-05T16:00:00","2018-02-05T17:01:25","2018-02-05T18:00:00","2018-02-05T19:00:01","2018-02-05T20:00:00","2018-02-05T21:00:50","2018-02-05T22:00:00","2018-02-05T23:00:00","2018-02-05T01:06:15",'2018-02-05T23:56:00' ];
+      const TICKS = [ '2018-02-05T00:01:50', "2018-02-05T02:00:32","2018-02-05T04:00:02","2018-02-05T06:00:03","2018-02-05T08:00:04","2018-02-05T10:00:13","2018-02-05T12:00:00","2018-02-05T14:00:00","2018-02-05T16:00:00","2018-02-05T18:00:00","2018-02-05T20:00:00","2018-02-05T22:00:00",'2018-02-05T23:58:19'];
+      // const TICKS = [ '2018-02-05T00:01:50','2018-02-05T21:02:23','2018-02-05T23:58:19'];
+      const chart = new G2.Chart({
+        container: 'container',
+        forceFit: true,
+        height: 500,
+        padding: [ 50, 20, 50, 20 ]
+      });
+      chart.source(data, {
+        date: {
+          ticks: TICKS
+        }
+      });
+      chart.legend(false);
+      chart.axis('buyin', false);
+      chart.axis('date', {
+        label: {
+          textStyle: {
+            fill: '#aaaaaa'
+          }
+        }
+      });
+      chart.line().position('date*buyin');
+      chart.point().position('date*buyin')
+        .size('date', val => {
+          if (TICKS.indexOf(val) >= 0) {
+            return 3;
+          }
+          return 0;
+        })
+        .label('date*buyin', (date, buyin) => {
+          if (TICKS.indexOf(date) >= 0) {
+            return buyin + '次';
+          }
+          return '';
+        }, {
+          textStyle: {
+            fill: '#7a7a7a',
+            fontSize: 12,
+            stroke: 'white',
+            lineWidth: 2,
+            fontWeight: 300
+          }
+        })
+        .style({ lineWidth: 2 });
+
+      chart.guide().line({
+        top: true,
+        start: [ '2018-02-05T00:01:50', 5830 ],
+        end: [ '2018-02-05T23:58:19', 1556 ],
+        lineStyle: {
+          stroke: '#595959',
+          lineWidth: 1,
+          lineDash: [ 3, 3 ]
+        },
+        text: {
+          position: 'start',
+          style: {
+            fill: '#8c8c8c',
+            fontSize: 12,
+            fontWeight: 300
+          },
+          content: '均值线 n次',
+          offsetY: -5
+        }
+      });
+      chart.render();
+    });
+    </script>
+  </body>
+</html>

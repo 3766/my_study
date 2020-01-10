@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+      <link rel="stylesheet" href="https://gw.alipayobjects.com/os/rmsportal/PqLCOJpqoOUfuPRacUzE.css" />
+    <title>点图层聚合</title>
+    <style> ::-webkit-scrollbar{display:none;}html,body{overflow:hidden;margin:0;}
+    	#map { position:absolute; top:0; bottom:0; width:100%; }
+    </style>
+</head>
+<body>
+<div id="map"></div>
+<script>/*Fixing iframe window.innerHeight 0 issue in Safari*/ document.body.clientHeight; </script>
+<script src="https://webapi.amap.com/maps?v=1.4.8&key=15cd8a57710d40c9b7c0e3cc120f1200&plugin=Map3D"></script>
+<script src="https://gw.alipayobjects.com/os/antv/assets/lib/jquery-3.2.1.min.js"></script>
+<script src="https://gw.alipayobjects.com/os/antv/pkg/_antv.l7-1.3.0-beta.4/build/L7-min.js"></script>
+<script>
+  var scene = new L7.Scene({
+    id: 'map',
+    mapStyle: 'dark', // 样式URL
+    center: [ 114.33383079335335, 30.551873105004427 ],
+    pitch: 4.00000000000001,
+    zoom: 10.210275860702593,
+    rotation: 19.313180925794313
+  });
+  window.scene = scene;
+  scene.on('loaded', function() {
+    $.get('http://114.55.27.162:8080/testweb2/path/point_little.json', function(data) {
+      var circleLayer = scene.PointLayer({
+          zIndex: 2
+        }).source(data, {
+          isCluster: true
+        }).shape('circle').size('point_count', [5, 40]) // default 1
+        .active(false).color('point_count', ["#002466", "#105CB3", "#2894E0", "#CFF6FF", "#FFF5B8", "#FFAB5C", "#F27049", "#730D1C"]).style({
+          stroke: 'rgb(255,255,255)',
+          strokeWidth: 2,
+          opacity: 1.0
+        }).render();
+
+      scene.PointLayer({
+        zIndex: 5
+      }).source(circleLayer.layerSource).shape('point_count', 'text').active(true).size('point_count', [10, 20, 24]).color('#fff').style({
+        // fontFamily: 'Monaco, monospace', // 字体
+        fontWeight: 200,
+        textAnchor: 'center', // 文本相对锚点的位置 center|left|right|top|bottom|top-left
+        textOffset: [0, 0], // 文本相对锚点的偏移量 [水平, 垂直]
+        spacing: 2, // 字符间距
+        padding: [1, 1], // 文本包围盒 padding [水平，垂直]，影响碰撞检测结果，避免相邻文本靠的太近
+        strokeColor: 'white', // 描边颜色
+        strokeWidth: 2, // 描边宽度
+        opacity: 1.0
+      }).render();
+      var popup = new L7.Popup({
+      anchor: 'left'
+    }).setText('光谷广场\n114.399185,30.506155');
+    new L7.Marker({
+      color: 'blue'
+    }).setLnglat([114.399208,30.506245]).setPopup(popup).addTo(scene);// 光谷广场
+    var popup2 = new L7.Popup({
+      anchor: 'left'
+    }).setText('汉口站\n114.254943,30.618127');
+    new L7.Marker({
+      color: 'blue'
+    }).setLnglat([114.254943,30.618127]).setPopup(popup2).addTo(scene);// 汉口站
+    var popup3 = new L7.Popup({
+      anchor: 'left'
+    }).setText('武汉站\n114.424327,30.607162');
+    new L7.Marker({
+      color: 'blue'
+    }).setLnglat([114.424327,30.607162]).setPopup(popup3).addTo(scene);// 武汉站
+    var popup4 = new L7.Popup({
+      anchor: 'left'
+    }).setText('武昌站\n114.316988,30.528739');
+    new L7.Marker({
+      color: 'blue'
+    }).setLnglat([114.316988,30.528739]).setPopup(popup4).addTo(scene);// 武昌站
+    var popup5 = new L7.Popup({
+      anchor: 'left'
+    }).setText('同济医院\n114.260894,30.578914');
+    new L7.Marker({
+      color: 'blue'
+    }).setLnglat([114.260894,30.578914]).setPopup(popup5).addTo(scene);// 武汉同济医院
+    var popup6 = new L7.Popup({
+      anchor: 'left'
+    }).setText('欢乐谷\n114.392085,30.594983');
+    new L7.Marker({
+      color: 'blue'
+    }).setLnglat([114.392085,30.594983]).setPopup(popup6).addTo(scene);//欢乐谷
+
+    var popup7 = new L7.Popup({
+      anchor: 'left'
+    }).setText('武汉园博园\n114.219937,30.623667');
+    new L7.Marker({
+      color: 'blue'
+    }).setLnglat([114.219937,30.623667]).setPopup(popup7).addTo(scene);//武汉园博园
+
+    
+    
+    });
+  });
+</script>
+</body>
+</html>

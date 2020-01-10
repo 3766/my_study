@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>创建地图场景</title>
+    <style> ::-webkit-scrollbar{display:none;}html,body{overflow:hidden;margin:0;}
+    	#map { position:absolute; top:0; bottom:0; width:100%; }
+    </style>
+</head>
+<body>
+<div id="map"></div>
+  <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.5.0/mapbox-gl.css' rel='stylesheet' />
+  
+  <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.5.0/mapbox-gl.js'></script>
+<!-- <script src="https://gw.alipayobjects.com/os/antv/pkg/_antv.l7-2.0.0-beta.25/dist/l7.js"></script> -->
+<script src="https://gw.alipayobjects.com/os/antv/pkg/_antv.l7-2.0.0-beta.19/dist/l7.js"></script>
+<script>
+
+const scene = new L7.Scene({
+  id: 'map',
+  map: new L7.GaodeMap({
+    style: 'light',
+    center: [ -121.24357, 37.58264 ],
+    pitch: 0,
+    zoom: 6.45
+  })
+});
+
+fetch(
+  'http://114.55.27.162:8080/testweb2/guanggu/guanggu_distance_mag.csv'
+)
+  .then(res => res.text())
+  .then(data => {
+    const pointLayer = new L7.PointLayer({})
+      .source(data, {
+        parser: {
+          type: 'csv',
+          x: 'Longitude',
+          y: 'Latitude'
+        }
+      })
+      .shape('circle')
+      .size(4)
+      .color('Magnitude', [
+        '#0A3663',
+        '#1558AC',
+        '#3771D9',
+        '#4D89E5',
+        '#64A5D3',
+        '#72BED6',
+        '#83CED6',
+        '#A6E1E0',
+        '#B8EFE2',
+        '#D7F9F0'
+      ])
+      .style({
+        opacity: 0.5,
+        strokeWidth: 0
+      });
+
+    scene.addLayer(pointLayer);
+  });
+
+
+
+
+</script>
+</body>
+</html>
